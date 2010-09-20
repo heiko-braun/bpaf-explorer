@@ -1,0 +1,10 @@
+.soa-PopupPanel {
+  border: 1px solid #e3e3e3;
+  padding: 3px;
+  background: white;
+  -moz-box-shadow: 3px 3px 3px #ccc;
+  -webkit-box-shadow: 3px 3px 3px #ccc;
+  box-shadow: 3px 3px 3px #ccc;
+  
+}
+

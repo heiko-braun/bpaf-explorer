@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ============================================================ -->
+<!--  JBoss, the OpenSource J2EE webOS                            -->
+<!--  Distributable under LGPL license.                           -->
+<!--  See terms of license at http://www.gnu.org.                 -->
+<!-- ============================================================ -->
+
+<project>
+
+  <!-- ##################### -->
+  <!-- ### CREATE SCHEMA ### -->
+  <!-- ##################### -->
+
+  <target name="create-schema">
+    <taskdef name="schemaexport"
+             classname="org.hibernate.tool.hbm2ddl.SchemaExportTask"
+             classpathref="maven.compile.classpath" />
+
+    <mkdir dir="${project.output.dir}" />
+
+    <!--create-ddl db="hsqldb" />
+    <create-ddl db="oracle" />
+    <create-ddl db="postgresql" /-->
+    <create-ddl db="mysql" />
+    <!--replace file="${project.output.dir}/jbpm.mysql.create.sql"
+             token="BLOB_VALUE_ blob"
+             value="BLOB_VALUE_ longblob" /-->
+  </target>
+
+  <macrodef name="create-ddl">
+    <attribute name="db" />
+
+    <sequential>
+      <echo />
+      <echo>=====================</echo>
+      <echo>Schema Create @{db}</echo>
+      <echo>=====================</echo>
+
+      <schemaexport output="${project.output.dir}/bpaf.@{db}.create.sql"
+                    create="yes"
+                    drop="no"
+                    config="src/main/resources/hibernate.cfg.xml"
+                    text="yes"
+                    delimiter=";"
+                    quiet="yes" />
+
+      <echo />
+      <echo>=====================</echo>
+      <echo>Schema Drop @{db}</echo>
+      <echo>=====================</echo>
+      <schemaexport output="${project.output.dir}/bpaf.@{db}.drop.sql"
+                    create="no"
+                    drop="yes"
+                    config="src/main/resources/hibernate.cfg.xml"
+                    text="yes"
+                    delimiter=";"
+                    quiet="yes" />
+
+    </sequential>
+  </macrodef>
+
+</project>
