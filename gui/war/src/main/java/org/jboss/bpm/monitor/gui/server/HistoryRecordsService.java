@@ -21,6 +21,7 @@
  */
 package org.jboss.bpm.monitor.gui.server;
 
+import com.google.inject.Inject;
 import org.jboss.bpm.monitor.gui.client.HistoryRecords;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
 import org.jboss.bpm.monitor.model.DefaultBPAFDataSource;
@@ -31,25 +32,26 @@ import java.util.List;
 @Service
 public class HistoryRecordsService implements HistoryRecords
 {
-  BPAFDataSource dataSource;
+    @Inject
+    BPAFDataSource dataSource;
 
-  public HistoryRecordsService()
-  {
-    this.dataSource = new DefaultBPAFDataSource();
-  }
+    public HistoryRecordsService()
+    {
+        //this.dataSource = new DefaultBPAFDataSource();
+    }
 
-  public List<String> getProcessDefinitionKeys()
-  {
-    return dataSource.getProcessDefinitions();
-  }
+    public List<String> getProcessDefinitionKeys()
+    {
+        return dataSource.getProcessDefinitions();
+    }
 
-  public List<String> getProcessInstanceKeys(String definition)
-  {
-    return dataSource.getProcessInstances(definition);
-  }
+    public List<String> getProcessInstanceKeys(String definition)
+    {
+        return dataSource.getProcessInstances(definition);
+    }
 
-  public List<String> getActivityKeys(String instance)
-  {
-    return dataSource.getActivityDefinitions(instance);  
-  }
+    public List<String> getActivityKeys(String instance)
+    {
+        return dataSource.getActivityDefinitions(instance);
+    }
 }

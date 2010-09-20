@@ -22,6 +22,7 @@
 package org.jboss.bpm.monitor.model;
 
 import org.jboss.bpm.monitor.model.bpaf.Event;
+import org.jboss.bpm.monitor.model.hibernate.HibernateUtil;
 import org.jboss.bpm.monitor.model.metric.Metrics;
 import org.jboss.bpm.monitor.model.metric.Timespan;
 
@@ -35,7 +36,7 @@ public class Runner
 {
   public static void main(String[] args)
   {
-    BPAFDataSource ds = new DefaultBPAFDataSource();
+    BPAFDataSource ds = new DefaultBPAFDataSource(HibernateUtil.getSessionFactory());
 
     // definitions
     List<String> definitions = ds.getProcessDefinitions();

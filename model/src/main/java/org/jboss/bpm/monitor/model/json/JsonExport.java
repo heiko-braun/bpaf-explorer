@@ -4,6 +4,7 @@ package org.jboss.bpm.monitor.model.json;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
 import org.jboss.bpm.monitor.model.DefaultBPAFDataSource;
 import org.jboss.bpm.monitor.model.bpaf.Event;
+import org.jboss.bpm.monitor.model.hibernate.HibernateUtil;
 import org.jboss.bpm.monitor.model.metric.Average;
 import org.jboss.bpm.monitor.model.metric.Grouping;
 import org.jboss.bpm.monitor.model.metric.Metrics;
@@ -19,7 +20,7 @@ public class JsonExport
 {
   public static void main(String[] args)
   {
-    BPAFDataSource ds = new DefaultBPAFDataSource();
+    BPAFDataSource ds = new DefaultBPAFDataSource(HibernateUtil.getSessionFactory());
 
     // definitions
     List<String> definitions = ds.getProcessDefinitions();

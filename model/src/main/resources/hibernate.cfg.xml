@@ -15,7 +15,7 @@
 
         <!--property name="hibernate.hbm2ddl.auto">create</property-->
 
-        <mapping resource="org/jboss/bpm/monitor/model/bpaf/BPAF.hbm.xml"/>
+        <mapping resource="BPAF.hbm.xml"/>
 
 
     </session-factory>

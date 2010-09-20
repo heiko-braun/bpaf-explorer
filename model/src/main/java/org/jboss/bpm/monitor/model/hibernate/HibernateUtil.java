@@ -32,26 +32,30 @@ import org.hibernate.cfg.Configuration;
  */
 public class HibernateUtil {
 
-  private static final SessionFactory sessionFactory;
+    private static final SessionFactory sessionFactory;
 
-  static
-  {
-    try
+    static
     {
-      sessionFactory =
-          new Configuration()
-              .configure()              
-              .buildSessionFactory();
+        try
+        {
+            sessionFactory =
+                    new Configuration()
+                            .configure()
+                            .buildSessionFactory();
+        }
+        catch (Throwable ex)
+        {
+            // Log exception!
+            throw new ExceptionInInitializerError(ex);
+        }
     }
-    catch (Throwable ex)
-    {
-      // Log exception!
-      throw new ExceptionInInitializerError(ex);
-    }
-  }
 
-  public static Session getSession() throws HibernateException
-  {
-    return sessionFactory.openSession();
-  }
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public static Session getSession() throws HibernateException
+    {
+        return sessionFactory.openSession();
+    }
 }
