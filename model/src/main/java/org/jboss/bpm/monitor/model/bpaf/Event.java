@@ -494,6 +494,7 @@ public class Event {
         "timestamp=" + timestamp +
         ", processDefinitionID='" + processDefinitionID + '\'' +
         ", processInstanceID='" + processInstanceID + '\'' +
+        ", activityDefinitionID='" + activityDefinitionID + '\'' +    
         ", eventDetails=" + eventDetails +
         '}';
   }
