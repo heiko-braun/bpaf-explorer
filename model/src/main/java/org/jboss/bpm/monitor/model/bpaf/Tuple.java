@@ -54,6 +54,7 @@ public class Tuple
   }
 
   @Id
+  @GeneratedValue(strategy= GenerationType.AUTO)  
   public long getId()
   {
     return id;
