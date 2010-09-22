@@ -1,10 +1,8 @@
 /* jboss.org */
 package org.jboss.bpm.monitor.gui.server;
 
-import com.google.inject.Inject;
 import org.jboss.bpm.monitor.gui.client.ChartData;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
-import org.jboss.bpm.monitor.model.DefaultBPAFDataSource;
 import org.jboss.bpm.monitor.model.bpaf.Event;
 import org.jboss.bpm.monitor.model.json.XYDataSetJSO;
 import org.jboss.bpm.monitor.model.metric.Grouping;
@@ -20,9 +18,7 @@ import java.util.*;
  */
 @Service
 public class ChartDataService implements ChartData
-{
-
-    @Inject
+{    
     BPAFDataSource dataSource;
 
     public ChartDataService()

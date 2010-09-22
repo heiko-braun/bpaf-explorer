@@ -22,23 +22,11 @@
 package org.jboss.bpm.monitor.gui.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.RootPanel;
-import org.jboss.errai.bus.client.ErraiBus;
-import org.jboss.errai.bus.client.api.base.MessageBuilder;
-import org.jboss.errai.bus.client.framework.MessageBus;
 import org.timepedia.chronoscope.client.ChronoscopeOptions;
 import org.timepedia.chronoscope.client.browser.Chronoscope;
 
 public class MonitorUI implements EntryPoint
-{
-  /**
-   * Get an instance of the MessageBus
-   */
-  private MessageBus bus = ErraiBus.get();
-
+{  
   public static Chronoscope chronoscope;
   
   public void onModuleLoad() {

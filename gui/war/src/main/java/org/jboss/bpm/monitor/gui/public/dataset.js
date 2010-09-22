@@ -1,1 +1,0 @@
-var dataset = {"id":"OrderCheckoutProcess","preferredRenderer": "line","domain": [1267789794540,1267876194540,1267962594540,1268048994540,1268135394540,1268221794540,1268308194540],"range" :[0,0,0,0,8,26,82],"label":"Process Instances last 7 days","axis":"Unit"}

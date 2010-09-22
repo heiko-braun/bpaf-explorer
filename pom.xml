@@ -40,13 +40,13 @@
         <commons-lang.version>2.4</commons-lang.version>
         <commons-config.version>1.6</commons-config.version>
         <gson.version>1.2.2</gson.version>
-        <gwt.version>2.0.0</gwt.version>
+        <gwt.version>2.0.4</gwt.version>
 
         <jboss.common.version>2.2.7.GA</jboss.common.version>
         <junit.version>3.8.1</junit.version>
         <resteasy.version>1.0.2.GA</resteasy.version>
         <stax-api.version>1.0-2</stax-api.version>
-        <errai.version>1.1-M2</errai.version>
+        <errai.version>1.1-SNAPSHOT</errai.version>
         <hibernate.version>3.3.1.GA</hibernate.version>
 
     </properties>
@@ -54,6 +54,7 @@
     <modules>
         <!--module>server</module-->
         <module>gui/war</module>
+        <module>gui/lib</module>
         <module>model</module>
         <module>emu</module>
     </modules>

@@ -21,18 +21,15 @@
  */
 package org.jboss.bpm.monitor.gui.server;
 
-import com.google.inject.Inject;
 import org.jboss.bpm.monitor.gui.client.HistoryRecords;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
-import org.jboss.bpm.monitor.model.DefaultBPAFDataSource;
 import org.jboss.errai.bus.server.annotations.Service;
 
 import java.util.List;
 
 @Service
 public class HistoryRecordsService implements HistoryRecords
-{
-    @Inject
+{    
     BPAFDataSource dataSource;
 
     public HistoryRecordsService()
