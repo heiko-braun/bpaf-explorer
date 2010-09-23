@@ -3,6 +3,7 @@ package org.jboss.bpm.monitor.gui.server;
 
 import org.jboss.bpm.monitor.gui.client.ChartData;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
+import org.jboss.bpm.monitor.model.DataSourceFactory;
 import org.jboss.bpm.monitor.model.bpaf.Event;
 import org.jboss.bpm.monitor.model.json.XYDataSetJSO;
 import org.jboss.bpm.monitor.model.metric.Grouping;
@@ -19,11 +20,11 @@ import java.util.*;
 @Service
 public class ChartDataService implements ChartData
 {    
-    BPAFDataSource dataSource;
+    private BPAFDataSource dataSource;
 
     public ChartDataService()
     {
-        //this.dataSource = new DefaultBPAFDataSource();
+        this.dataSource = DataSourceFactory.createDataSource();
     }
 
     /**
@@ -34,6 +35,8 @@ public class ChartDataService implements ChartData
      */
     public String getDefinitionActivity(String processDefiniton, String timespanValue)
     {
+        assertDataSource();
+
         final Timespan timespan = Timespan.fromValue(timespanValue);
 
         List<Event> events = dataSource.getDefinitionEvents(processDefiniton, timespan);
@@ -77,5 +80,11 @@ public class ChartDataService implements ChartData
         dataSet.setAxis("date");
 
         return dataSet.toJSO();
+    }
+
+    private void assertDataSource() {
+        if(null==this.dataSource)
+            throw new IllegalStateException("BPAFDataSource not initialized");
+
     }
 }

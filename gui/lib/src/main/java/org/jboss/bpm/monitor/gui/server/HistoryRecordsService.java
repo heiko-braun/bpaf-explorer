@@ -23,32 +23,44 @@ package org.jboss.bpm.monitor.gui.server;
 
 import org.jboss.bpm.monitor.gui.client.HistoryRecords;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
+import org.jboss.bpm.monitor.model.DataSourceFactory;
 import org.jboss.errai.bus.server.annotations.Service;
 
 import java.util.List;
 
 @Service
 public class HistoryRecordsService implements HistoryRecords
-{    
-    BPAFDataSource dataSource;
+{
+    
+    private BPAFDataSource dataSource;
 
     public HistoryRecordsService()
     {
-        //this.dataSource = new DefaultBPAFDataSource();
+        this.dataSource = DataSourceFactory.createDataSource();
     }
 
     public List<String> getProcessDefinitionKeys()
     {
+        assertDataSource();
         return dataSource.getProcessDefinitions();
     }
 
     public List<String> getProcessInstanceKeys(String definition)
     {
+        assertDataSource();
         return dataSource.getProcessInstances(definition);
     }
 
     public List<String> getActivityKeys(String instance)
     {
+        assertDataSource();
         return dataSource.getActivityDefinitions(instance);
+    }
+
+    // catch hosted mode errors
+    private void assertDataSource() {
+        if(null==this.dataSource)
+            throw new IllegalStateException("BPAFDataSource not initialized");
+
     }
 }

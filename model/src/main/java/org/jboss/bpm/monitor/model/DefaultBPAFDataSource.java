@@ -21,13 +21,14 @@
  */
 package org.jboss.bpm.monitor.model;
 
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.jboss.bpm.monitor.model.bpaf.Event;
 import org.jboss.bpm.monitor.model.metric.Timespan;
 
+import javax.naming.InitialContext;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.transaction.*;
 import java.util.List;
 
 /**
@@ -37,32 +38,54 @@ import java.util.List;
 public class DefaultBPAFDataSource implements BPAFDataSource
 {
 
-    SessionFactory sessionFactory;
-
-    public DefaultBPAFDataSource(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    EntityManagerFactory emf;
+    
+    public DefaultBPAFDataSource(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
     private interface SQLCommand<T>
     {
-        T execute(Session session);
+        T execute(EntityManager em);
     }
 
     private <T> T executeCommand(SQLCommand<T> cmd)
     {
-        Session session = sessionFactory.openSession();
+
+        EntityManager em = null;
+        UserTransaction tx = null;
+        boolean sucess = true;
 
         try
         {
-            return cmd.execute(session);
+            InitialContext ctx = new InitialContext();
+            tx = (UserTransaction)ctx.lookup("UserTransaction");
+            tx.begin();
+
+            em = emf.createEntityManager();         
+            return cmd.execute(em);
         }
         catch(Exception e)
         {
+            sucess = false;
             throw new RuntimeException("Failed to execute query", e);
         }
         finally
         {
-            session.close();
+            if(em!=null)
+            {
+                try {
+                    if(sucess)
+                        tx.commit();
+                    else
+                        tx.setRollbackOnly();
+                    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                em.close();
+            }
         }
 
     }
@@ -71,12 +94,12 @@ public class DefaultBPAFDataSource implements BPAFDataSource
     {
         List<String> result = executeCommand(new SQLCommand<List<String>>()
         {
-            public List<String> execute(Session session)
+            public List<String> execute(EntityManager em)
             {
-                Query query = session.createQuery(
+                Query query = em.createQuery(
                         "select distinct e.processDefinitionID from org.jboss.bpm.monitor.model.bpaf.Event as e"
                 );
-                return query.list();
+                return query.getResultList();
             }
         });
 
@@ -87,14 +110,14 @@ public class DefaultBPAFDataSource implements BPAFDataSource
     {
         List<String> result = executeCommand(new SQLCommand<List<String>>()
         {
-            public List<String> execute(Session session)
+            public List<String> execute(EntityManager em)
             {
-                Query query = session.createQuery(
+                Query query = em.createQuery(
                         "select distinct e.processInstanceID from org.jboss.bpm.monitor.model.bpaf.Event as e" +
                                 " where e.processDefinitionID=:id"
                 );
-                query.setString("id", processDefinition);
-                return query.list();
+                query.setParameter("id", processDefinition);
+                return query.getResultList();
             }
         });
 
@@ -105,15 +128,15 @@ public class DefaultBPAFDataSource implements BPAFDataSource
     {
         List<String> result = executeCommand(new SQLCommand<List<String>>()
         {
-            public List<String> execute(Session session)
+            public List<String> execute(EntityManager em)
             {
-                Query query = session.createQuery(
+                Query query = em.createQuery(
                         "select distinct e.activityDefinitionID from org.jboss.bpm.monitor.model.bpaf.Event as e" +
                                 " where e.processInstanceID=:id" +
                                 " and e.activityDefinitionID!=null"
                 );
-                query.setString("id", processInstance);
-                return query.list();
+                query.setParameter("id", processInstance);
+                return query.getResultList();
             }
         });
 
@@ -124,24 +147,22 @@ public class DefaultBPAFDataSource implements BPAFDataSource
     {
         List<Event> result = executeCommand(new SQLCommand<List<Event>>()
         {
-            public List<Event> execute(Session session)
+            public List<Event> execute(EntityManager em)
             {
 
-                SQLQuery query = session.createSQLQuery("select e1.* " +
+                Query query = em.createNativeQuery("select e1.* " +
                         "from BPAF_EVENT e1, BPAF_EVENT e2 " +
                         "where e1.processDefinitionID=e2.processDefinitionID " +
                         "and e1.processInstanceID=e2.processInstanceID " +
-                        "and ((e1.currentState=\"Open\" and e2.currentState=\"Closed\") OR (e2.currentState=\"Open\" and e1.currentState=\"Closed\")) " +
+                        "and ((e1.currentState=\"Open_Running\" and e2.currentState=\"Closed_Completed\") OR (e2.currentState=\"Open_Running\" and e1.currentState=\"Closed_Completed\")) " +
                         "and e1.activityDefinitionID is null " +
                         "and e2.activityDefinitionID is null " +
                         "and e1.processDefinitionID='"+processDefinition+"' "+
                         "and e1.timeStamp>="+timespan.getStart()+" "+
                         "and e2.timeStamp<="+timespan.getEnd()+" "+
-                        "order by e1.eventID;");
+                        "order by e1.eventID;", Event.class);
 
-                query.addEntity(Event.class);
-
-                return query.list();
+                return query.getResultList();
             }
         });
 
@@ -153,12 +174,12 @@ public class DefaultBPAFDataSource implements BPAFDataSource
     {
         List<Event> result = executeCommand(new SQLCommand<List<Event>>()
         {
-            public List<Event> execute(Session session)
+            public List<Event> execute(EntityManager em)
             {
                 StringBuffer sb = new StringBuffer("SELECT e1.* ");
                 sb.append("FROM BPAF_EVENT e1, BPAF_EVENT e2 ");
                 sb.append("WHERE e1.processInstanceID=e2.processInstanceID " );
-                sb.append("AND ((e1.currentState=\"Open\" and e2.currentState=\"Closed\") OR (e2.currentState=\"Open\" and e1.currentState=\"Closed\")) " );
+                sb.append("AND ((e1.currentState=\"Open_Running\" and e2.currentState=\"Closed_Completed\") OR (e2.currentState=\"Open_Running\" and e1.currentState=\"Closed_Completed\")) " );
                 sb.append("AND e1.activityDefinitionID is not null " );
                 sb.append("AND e2.activityDefinitionID is not null " );
 
@@ -180,11 +201,9 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                 sb.append("ORDER BY e1.timeStamp, e1.processInstanceID");
 
 
-                SQLQuery query = session.createSQLQuery(sb.toString());
+                Query query = em.createNativeQuery(sb.toString(), Event.class);
 
-                query.addEntity(Event.class);
-
-                return query.list();
+                return query.getResultList();
             }
         });
 
