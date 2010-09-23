@@ -448,7 +448,7 @@ public class Event {
      * An identifier of the current state
      * of the object that changed state, derived from the BPAF state model
      */
-    @XmlAttribute(name = "CurrentState", required = true)
+    @XmlAttribute(name = "CurrentState", required = true)    
     protected State currentState;
 
     /**
@@ -460,6 +460,7 @@ public class Event {
     protected State previousState;
 
     @Basic()
+    @Enumerated(EnumType.STRING)
     public State getCurrentState() {
       return this.currentState;
     }
@@ -470,6 +471,7 @@ public class Event {
     }
 
     @Basic(optional = true)
+    @Enumerated(EnumType.STRING)
     public State getPreviousState() {
       return this.previousState;
     }
@@ -496,7 +498,7 @@ public class Event {
         ", processDefinitionID='" + processDefinitionID + '\'' +
         ", processInstanceID='" + processInstanceID + '\'' +
         ", activityDefinitionID='" + activityDefinitionID + '\'' +    
-        ", eventDetails=" + eventDetails +
+        ", eventDetails=" + eventDetails +            
         '}';
   }
 }
