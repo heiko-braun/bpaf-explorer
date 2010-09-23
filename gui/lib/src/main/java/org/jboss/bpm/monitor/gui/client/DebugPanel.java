@@ -25,7 +25,7 @@ import java.util.List;
  * @author: Heiko Braun <hbraun@redhat.com>
  * @date: Mar 11, 2010
  */
-@LoadTool(name = "Key Sets", group = "Storage")
+@LoadTool(name = "Key Sets", group = "Processes")
 public class DebugPanel implements WidgetProvider
 {
 

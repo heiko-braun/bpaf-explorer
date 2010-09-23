@@ -45,7 +45,7 @@ import java.util.Map;
  * @author: Heiko Braun <hbraun@redhat.com>
  * @date: Mar 11, 2010
  */
-@LoadTool(name="Process Activity", group = "History")
+@LoadTool(name="Process Activity", group = "Processes")
 public class DefinitionHistoryView implements WidgetProvider, CommentEditCallback
 {
 
