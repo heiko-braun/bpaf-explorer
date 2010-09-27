@@ -53,10 +53,10 @@
 
     <modules>
         <!--module>server</module-->
-        <module>gui/war</module>
+        <!--module>gui/war</module-->
         <module>gui/lib</module>
         <module>model</module>
-        <module>emu</module>
+        <!--module>emu</module-->
     </modules>
 
     <dependencyManagement>
@@ -156,13 +156,13 @@
             <dependency>
                 <groupId>org.timepedia.chronoscope</groupId>
                 <artifactId>chronoscope</artifactId>
-                <version>1.0</version>
+                <version>2.0_jboss-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.timepedia.chronoscope</groupId>
                 <artifactId>chronoscope-api</artifactId>
-                <version>1.0</version>
+                <version>2.0_jboss-SNAPSHOT</version>
             </dependency>
 
              <dependency>
