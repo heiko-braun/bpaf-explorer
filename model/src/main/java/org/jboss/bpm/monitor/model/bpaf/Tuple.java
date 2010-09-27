@@ -54,7 +54,8 @@ public class Tuple
   }
 
   @Id
-  @GeneratedValue(strategy= GenerationType.AUTO)  
+  @GeneratedValue(strategy= GenerationType.AUTO)
+  @Column(name = "TID")
   public long getId()
   {
     return id;
@@ -65,6 +66,7 @@ public class Tuple
     this.id = id;
   }
 
+  @Column(name = "NAME")
   public String getName()
   {
     return name;
@@ -75,6 +77,7 @@ public class Tuple
     this.name = name;
   }
 
+  @Column(name = "VALUE")  
   public String getValue()
   {
     return value;

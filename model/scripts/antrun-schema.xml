@@ -8,56 +8,66 @@
 
 <project>
 
-  <!-- ##################### -->
-  <!-- ### CREATE SCHEMA ### -->
-  <!-- ##################### -->
+    <!-- ##################### -->
+    <!-- ### CREATE SCHEMA ### -->
+    <!-- ##################### -->
 
-  <target name="create-schema">
-    <taskdef name="schemaexport"
-             classname="org.hibernate.tool.hbm2ddl.SchemaExportTask"
-             classpathref="maven.compile.classpath" />
+    <target name="create-schema">        
+        <taskdef name="hibernatetool"
+                 classname="org.hibernate.tool.ant.HibernateToolTask"
+                 classpathref="maven.compile.classpath"/>
 
-    <mkdir dir="${project.output.dir}" />
+        <mkdir dir="${project.output.dir}" />
 
-    <!--create-ddl db="hsqldb" />
-    <create-ddl db="oracle" />
-    <create-ddl db="postgresql" /-->
-    <create-ddl db="mysql" />
-    <!--replace file="${project.output.dir}/jbpm.mysql.create.sql"
-             token="BLOB_VALUE_ blob"
-             value="BLOB_VALUE_ longblob" /-->
-  </target>
+        <!--create-ddl db="hsqldb" />
+      <create-ddl db="oracle" />
+      <create-ddl db="postgresql" /-->
+        <create-ddl db="mysql" />
+        <!--replace file="${project.output.dir}/jbpm.mysql.create.sql"
+      token="BLOB_VALUE_ blob"
+      value="BLOB_VALUE_ longblob" /-->
+    </target>
 
-  <macrodef name="create-ddl">
-    <attribute name="db" />
+    <macrodef name="create-ddl">
+        <attribute name="db" />
 
-    <sequential>
-      <echo />
-      <echo>=====================</echo>
-      <echo>Schema Create @{db}</echo>
-      <echo>=====================</echo>
+        <sequential>
+            <echo />
+            <echo>=====================</echo>
+            <echo>Schema Create @{db}</echo>
+            <echo>${project.output.dir}/bpaf.@{db}.create.sql</echo>
+            <echo>=====================</echo>
 
-      <schemaexport output="${project.output.dir}/bpaf.@{db}.create.sql"
-                    create="yes"
-                    drop="no"
-                    config="src/main/resources/hibernate.cfg.xml"
-                    text="yes"
-                    delimiter=";"
-                    quiet="yes" />
+            <hibernatetool destdir="${basedir}">
+                <classpath refid="maven.compile.classpath"/>
+                <!-- Use META-INF/persistence.xml -->
+                <jpaconfiguration persistenceunit="manager1"/>
+                <classpath>
+                    <path location="${project.output.dir}" />
+                </classpath>
+                <hbm2ddl
+                        drop="false"
+                        create="true"
+                        export="false"
+                        outputfilename="${project.output.dir}/bpaf.@{db}.create.sql"
+                        delimiter=";"
+                        format="true" haltonerror="true"/>
+            </hibernatetool>
 
-      <echo />
-      <echo>=====================</echo>
-      <echo>Schema Drop @{db}</echo>
-      <echo>=====================</echo>
-      <schemaexport output="${project.output.dir}/bpaf.@{db}.drop.sql"
-                    create="no"
-                    drop="yes"
-                    config="src/main/resources/hibernate.cfg.xml"
-                    text="yes"
-                    delimiter=";"
-                    quiet="yes" />
+            <echo />
+            <echo>=====================</echo>
+            <echo>Schema Drop @{db}</echo>
+            <echo>${project.output.dir}/bpaf.@{db}.drop.sql</echo>
+            <echo>=====================</echo>
+            <!--schemaexport output="${project.output.dir}/bpaf.@{db}.drop.sql"
+           create="no"
+           drop="yes"
+           config="src/main/resources/hibernate.cfg.xml"
+           text="yes"
+           delimiter=";"
+           quiet="yes" /-->
 
-    </sequential>
-  </macrodef>
+        </sequential>
+    </macrodef>
 
 </project>

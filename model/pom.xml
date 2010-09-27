@@ -24,6 +24,15 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-tools</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -41,7 +50,7 @@
 
         <dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>            
+            <artifactId>mysql-connector-java</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -60,7 +69,14 @@
                         <configuration>
                             <tasks>
                                 <property name="project.output.dir" value="${project.build.outputDirectory}" />
-                                <ant antfile="scripts/antrun-schema.xml" target="create-schema" inheritRefs="yes" />
+                                <!--ant antfile="scripts/antrun-schema.xml" target="create-schema" inheritRefs="yes" /-->
+                                <java classname="org.jboss.bpm.monitor.model.hibernate.SchemaGenerator">
+                                    <arg value="${project.build.outputDirectory}"/>
+                                    <classpath>                                        
+                                        <pathelement path="${java.class.path}"/>
+                                        <path refid="maven.compile.classpath"/>
+                                    </classpath>
+                                </java>
                             </tasks>
                         </configuration>
                     </execution>

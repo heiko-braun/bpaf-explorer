@@ -73,7 +73,7 @@ public class Event {
   /**
    * A globally unique identifier for the individual event
    */
-  @XmlAttribute(name = "EventID", required = true)  
+  @XmlAttribute(name = "EventID", required = true)
   protected long eventID;
 
   /**
@@ -100,6 +100,7 @@ public class Event {
   @XmlAttribute(name = "ProcessInstanceID", required = true)
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NMTOKEN")
+  @Column(name = "PROCESS_INSTANCE_ID")
   protected String processInstanceID;
 
   /**
@@ -107,6 +108,7 @@ public class Event {
    * from which the current process instance has been derived.
    */
   @XmlAttribute(name = "ProcessName")
+  @Column(name = "PROCESS_NAME")
   protected String processName;
 
   /**
@@ -116,6 +118,7 @@ public class Event {
   @XmlAttribute(name = "ActivityDefinitionID")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NMTOKEN")
+  @Column(name = "ACTIVITY_DEFINITION_ID")
   protected String activityDefinitionID;
 
   /**
@@ -125,6 +128,7 @@ public class Event {
   @XmlAttribute(name = "ActivityInstanceID")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "NMTOKEN")
+  @Column(name = "ACTIVITY_IINSTANCE_ID")
   protected String activityInstanceID;
 
   /**
@@ -132,6 +136,7 @@ public class Event {
    * from which the current activity instance has been derived.
    */
   @XmlAttribute(name = "ActivityName")
+  @Column(name = "ACTIVITY_NAME")
   protected String activityName;
 
   /**
@@ -139,6 +144,7 @@ public class Event {
    */
   @XmlAttribute(name = "Timestamp", required = true)
   @XmlSchemaType(name = "long")
+  @Column(name = "TIMESTAMP")
   protected long timestamp;
 
   public Event()
@@ -205,6 +211,7 @@ public class Event {
    */
   @Id
   @GeneratedValue(strategy= GenerationType.AUTO)
+  @Column(name = "EID")
   public long getEventID() {
     return eventID;
   }
@@ -230,6 +237,7 @@ public class Event {
    *
    */
   @Basic(optional = true)
+  @Column(name = "SERVER_ID")
   public String getServerID() {
     return serverID;
   }
@@ -255,6 +263,7 @@ public class Event {
    *
    */
   @Basic
+  @Column(name = "PROCESS_DEFINITION_ID")
   public String getProcessDefinitionID() {
     return processDefinitionID;
   }
@@ -280,6 +289,7 @@ public class Event {
    *
    */
   @Basic
+  @Column(name = "PROCESS_INSTANCE_ID")
   public String getProcessInstanceID() {
     return processInstanceID;
   }
@@ -305,6 +315,7 @@ public class Event {
    *
    */
   @Basic(optional = true)
+  @Column(name = "PROCESS_NAME")
   public String getProcessName() {
     return processName;
   }
@@ -330,6 +341,7 @@ public class Event {
    *
    */
   @Basic(optional = true)
+  @Column(name = "ACTIVITY_DEFINITION_ID")
   public String getActivityDefinitionID() {
     return activityDefinitionID;
   }
@@ -355,6 +367,7 @@ public class Event {
    *
    */
   @Basic(optional = true)
+  @Column(name = "ACTIVITY_INSTANCE_ID")
   public String getActivityInstanceID() {
     return activityInstanceID;
   }
@@ -380,6 +393,7 @@ public class Event {
    *
    */
   @Basic(optional = true)
+   @Column(name = "ACTIVITY_NAME")
   public String getActivityName() {
     return activityName;
   }
@@ -404,6 +418,7 @@ public class Event {
    *     {@link XMLGregorianCalendar }
    *
    */
+  @Column(name = "TIMESTAMP")
   public long getTimestamp() {
     return timestamp;
   }
@@ -448,7 +463,7 @@ public class Event {
      * An identifier of the current state
      * of the object that changed state, derived from the BPAF state model
      */
-    @XmlAttribute(name = "CurrentState", required = true)    
+    @XmlAttribute(name = "CurrentState", required = true)
     protected State currentState;
 
     /**
@@ -461,6 +476,7 @@ public class Event {
 
     @Basic()
     @Enumerated(EnumType.STRING)
+    @Column(name = "CURRENT_STATE")
     public State getCurrentState() {
       return this.currentState;
     }
@@ -472,6 +488,7 @@ public class Event {
 
     @Basic(optional = true)
     @Enumerated(EnumType.STRING)
+    @Column(name = "PREVIOUS_STATE")
     public State getPreviousState() {
       return this.previousState;
     }
