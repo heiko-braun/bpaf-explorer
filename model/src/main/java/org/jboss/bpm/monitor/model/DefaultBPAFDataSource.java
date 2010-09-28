@@ -154,7 +154,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                         "from BPAF_EVENT e1, BPAF_EVENT e2 " +
                         "where e1.PROCESS_DEFINITION_ID=e2.PROCESS_DEFINITION_ID " +
                         "and e1.PROCESS_INSTANCE_ID=e2.PROCESS_INSTANCE_ID " +
-                        "and ((e1.CURRENT_STATE=\"Open_Running\" and e2.CURRENT_STATE=\"Closed_Completed\") OR (e2.CURRENT_STATE=\"Open_Running\" and e1.CURRENT_STATE=\"Closed_Completed\")) " +
+                        "and ((e1.CURRENT_STATE=?1 and e2.CURRENT_STATE=?2) OR (e2.CURRENT_STATE=?1 and e1.CURRENT_STATE=?2)) " +
                         "and e1.ACTIVITY_DEFINITION_ID is null " +
                         "and e2.ACTIVITY_DEFINITION_ID is null " +
                         "and e1.PROCESS_DEFINITION_ID='"+processDefinition+"' "+
@@ -162,6 +162,9 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                         "and e2.TIMESTAMP<="+timespan.getEnd()+" "+
                         "order by e1.EID;", Event.class);
 
+                query.setParameter(1, "Open_Running");
+                query.setParameter(2, "Closed_Completed");
+                
                 return query.getResultList();
             }
         });
@@ -179,7 +182,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                 StringBuffer sb = new StringBuffer("SELECT e1.* ");
                 sb.append("FROM BPAF_EVENT e1, BPAF_EVENT e2 ");
                 sb.append("WHERE e1.PROCESS_INSTANCE_ID=e2.PROCESS_INSTANCE_ID " );
-                sb.append("AND ((e1.CURRENT_STATE=\"Open_Running\" and e2.CURRENT_STATE=\"Closed_Completed\") OR (e2.CURRENT_STATE=\"Open_Running\" and e1.CURRENT_STATE=\"Closed_Completed\")) " );
+                sb.append("AND ((e1.CURRENT_STATE=?1 and e2.CURRENT_STATE=?2) OR (e2.CURRENT_STATE=?1 and e1.CURRENT_STATE=?2)) " );
                 sb.append("AND e1.ACTIVITY_DEFINITION_ID is not null " );
                 sb.append("AND e2.ACTIVITY_DEFINITION_ID is not null " );
 
@@ -203,6 +206,9 @@ public class DefaultBPAFDataSource implements BPAFDataSource
 
                 Query query = em.createNativeQuery(sb.toString(), Event.class);
 
+                query.setParameter(1, "Open_Running");
+                query.setParameter(2, "Closed_Completed");
+                
                 return query.getResultList();
             }
         });
