@@ -97,7 +97,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
             public List<String> execute(EntityManager em)
             {
                 Query query = em.createNativeQuery(
-                        "select distinct e.PROCESS_DEFINITION_ID from BPAF_EVENT as e", Event.class
+                        "select distinct e.PROCESS_DEFINITION_ID from BPAF_EVENT as e"
                 );
                 return query.getResultList();
             }
@@ -114,7 +114,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
             {
                 Query query = em.createNativeQuery(
                         "select distinct e.PROCESS_INSTANCE_ID from BPAF_EVENT as e" +
-                                " where e.PROCESS_DEFINITION_ID=:id", Event.class
+                                " where e.PROCESS_DEFINITION_ID=:id"
                 );
                 query.setParameter("id", processDefinition);
                 return query.getResultList();
@@ -133,7 +133,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                 Query query = em.createNativeQuery(
                         "select distinct e.ACTIVITY_DEFINITION_ID from BPAF_EVENT as e" +
                                 " where e.PROCESS_INSTANCE_ID=:id" +
-                                " and e.ACTIVITY_DEFINITION_ID!=null", Event.class
+                                " and e.ACTIVITY_DEFINITION_ID!=null"
                 );
                 query.setParameter("id", processInstance);
                 return query.getResultList();
@@ -160,7 +160,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                         "and e1.PROCESS_DEFINITION_ID='"+processDefinition+"' "+
                         "and e1.TIMESTAMP>="+timespan.getStart()+" "+
                         "and e2.TIMESTAMP<="+timespan.getEnd()+" "+
-                        "order by e1.EVENT_ID;", Event.class);
+                        "order by e1.EID;", Event.class);
 
                 return query.getResultList();
             }
