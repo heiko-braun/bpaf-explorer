@@ -52,6 +52,8 @@ public interface BPAFDataSource
 
   List<String> getActivityDefinitions(String processInstance);
 
+  List<Event> getPastActivities(final String processInstance);
+
   /**
    * Get a list of process definition events for a specific timespan.
    * Process definition events are the ones that don't have and activityDefinition

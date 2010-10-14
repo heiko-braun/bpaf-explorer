@@ -143,6 +143,26 @@ public class DefaultBPAFDataSource implements BPAFDataSource
         return result;
     }
 
+
+    public List<Event> getPastActivities(final String processInstance)
+    {
+        List<Event> result = executeCommand(new SQLCommand<List<Event>>()
+        {
+            public List<Event> execute(EntityManager em)
+            {
+                Query query = em.createQuery(
+                        "select e from Event as e" +
+                                " where e.processInstanceID=:id"
+                );
+                query.setParameter("id", processInstance);
+                
+                return query.getResultList();
+            }
+        });
+
+        return result;
+    }
+
     public List<Event> getDefinitionEvents(final String processDefinition, final Timespan timespan)
     {
         List<Event> result = executeCommand(new SQLCommand<List<Event>>()

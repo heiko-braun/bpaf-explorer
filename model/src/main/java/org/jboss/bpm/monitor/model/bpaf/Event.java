@@ -189,12 +189,18 @@ public class Event {
    * 
    * @return
    */
-  @OneToMany(mappedBy="event")
+  @OneToMany(mappedBy="event", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
   public List<Tuple> getDataElement() {
     if (dataElement == null) {
       dataElement = new ArrayList<Tuple>();
     }
     return this.dataElement;
+  }
+
+  public void addData(Tuple tuple)
+  {
+    tuple.setEvent(this);
+    getDataElement().add(tuple);
   }
 
   public void setDataElement(List<Tuple> data) {
