@@ -174,8 +174,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                 return query.getResultList();
             }
         });
-
-        System.out.println(timespan.getTitle() +": "+ result.size());
+        
         return result;
     }
 
