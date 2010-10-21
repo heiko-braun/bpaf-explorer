@@ -1,7 +1,6 @@
 /* jboss.org */
 package org.jboss.bpm.monitor.gui.client;
 
-import org.jboss.bpm.monitor.model.metric.Timespan;
 import org.jboss.errai.bus.server.annotations.Remote;
 
 /**
@@ -11,5 +10,9 @@ import org.jboss.errai.bus.server.annotations.Remote;
 @Remote
 public interface ChartData
 {
-  String getDefinitionActivity(String processDefiniton, String timespanValue);  
+    String getCompletedInstances(String processDefiniton, String timespanValue);
+
+    String getFailedInstances(String processDefiniton, String timespanValue);
+
+    String getTerminatedInstances(String processDefiniton, String timespanValue);
 }

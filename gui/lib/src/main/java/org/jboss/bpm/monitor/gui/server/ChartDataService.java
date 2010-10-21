@@ -4,9 +4,11 @@ package org.jboss.bpm.monitor.gui.server;
 import org.jboss.bpm.monitor.gui.client.ChartData;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
 import org.jboss.bpm.monitor.model.DataSourceFactory;
+import org.jboss.bpm.monitor.model.bpaf.State;
+import org.jboss.bpm.monitor.model.metric.Grouping;
+import org.jboss.bpm.monitor.model.metric.TimespanFactory;
 import org.jboss.bpm.monitor.model.bpaf.Event;
 import org.jboss.bpm.monitor.model.json.XYDataSetJSO;
-import org.jboss.bpm.monitor.model.metric.Grouping;
 import org.jboss.bpm.monitor.model.metric.Timespan;
 import org.jboss.errai.bus.server.annotations.Service;
 
@@ -27,20 +29,55 @@ public class ChartDataService implements ChartData
         this.dataSource = DataSourceFactory.createDataSource();
     }
 
-    /**
-     * Delegates to {@link org.jboss.bpm.monitor.model.BPAFDataSource#getDefinitionEvents(String, org.jboss.bpm.monitor.model.metric.Timespan)}
+    /**     
      * @param processDefiniton a processDefinitionID
      * @param timespanValue a timespan string identifier
      * @return JSON data
      */
-    public String getDefinitionActivity(String processDefiniton, String timespanValue)
+    public String getCompletedInstances(String processDefiniton, String timespanValue)
     {
         assertDataSource();
 
-        final Timespan timespan = Timespan.fromValue(timespanValue);
+        final Timespan timespan = TimespanFactory.fromValue(timespanValue);
 
-        List<Event> events = dataSource.getDefinitionEvents(processDefiniton, timespan);
+        List<Event> events = dataSource.getInstanceEvents(processDefiniton, timespan, State.Closed_Completed);
 
+        return createDatasetJSO("Process Instances", timespan, events, true);
+    }
+
+    /**
+     * @param processDefiniton a processDefinitionID
+     * @param timespanValue a timespan string identifier
+     * @return JSON data
+     */
+    public String getFailedInstances(String processDefiniton, String timespanValue)
+    {
+        assertDataSource();
+
+        final Timespan timespan = TimespanFactory.fromValue(timespanValue);
+
+        List<Event> events = dataSource.getInstanceEvents(processDefiniton, timespan, State.Closed_Completed_Failed);
+
+        return createDatasetJSO("Process Instances", timespan, events, true);
+    }
+
+    /**
+     * @param processDefiniton a processDefinitionID
+     * @param timespanValue a timespan string identifier
+     * @return JSON data
+     */
+    public String getTerminatedInstances(String processDefiniton, String timespanValue)
+    {
+        assertDataSource();
+
+        final Timespan timespan = TimespanFactory.fromValue(timespanValue);
+
+        List<Event> events = dataSource.getInstanceEvents(processDefiniton, timespan, State.Closed_Cancelled_Terminated);
+
+        return createDatasetJSO("Process Instances", timespan, events, true);
+    }
+
+    private static String createDatasetJSO(String title, Timespan timespan, List<Event> events, boolean matchParity) {
         SortedMap<Date, List<Event>> grouped;
 
         switch (timespan.getUnit())
@@ -63,7 +100,7 @@ public class ChartDataService implements ChartData
         }
 
         XYDataSetJSO dataSet = new XYDataSetJSO(
-                "Process Instances "+timespan.getTitle(),
+                title+" "+timespan.getTitle(),
                 UUID.randomUUID().toString()
         );
 
@@ -72,7 +109,10 @@ public class ChartDataService implements ChartData
         for(Date d : grouped.keySet())
         {
             domainData.add(d.getTime());
-            rangeData.add(new Integer(grouped.get(d).size()).longValue());
+
+            // if parity matched datasets, then we get Open and Closed events.
+            int actualSize = matchParity ? grouped.get(d).size()/2 : grouped.get(d).size();
+            rangeData.add(new Integer(actualSize).longValue());
         }
 
         dataSet.getDomain().add(domainData);

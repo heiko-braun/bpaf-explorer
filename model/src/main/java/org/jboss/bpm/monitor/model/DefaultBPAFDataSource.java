@@ -22,6 +22,7 @@
 package org.jboss.bpm.monitor.model;
 
 import org.jboss.bpm.monitor.model.bpaf.Event;
+import org.jboss.bpm.monitor.model.bpaf.State;
 import org.jboss.bpm.monitor.model.metric.Timespan;
 
 import javax.naming.InitialContext;
@@ -143,27 +144,10 @@ public class DefaultBPAFDataSource implements BPAFDataSource
         return result;
     }
 
-
-    public List<Event> getPastActivities(final String processInstance)
-    {
-        List<Event> result = executeCommand(new SQLCommand<List<Event>>()
-        {
-            public List<Event> execute(EntityManager em)
-            {
-                Query query = em.createQuery(
-                        "select e from Event as e" +
-                                " where e.processInstanceID=:id"
-                );
-                query.setParameter("id", processInstance);
-                
-                return query.getResultList();
-            }
-        });
-
-        return result;
-    }
-
-    public List<Event> getDefinitionEvents(final String processDefinition, final Timespan timespan)
+    public List<Event> getInstanceEvents(
+            final String processDefinition,
+            final Timespan timespan,
+            final State completionState)
     {
         List<Event> result = executeCommand(new SQLCommand<List<Event>>()
         {
@@ -178,13 +162,15 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                         "and e1.ACTIVITY_DEFINITION_ID is null " +
                         "and e2.ACTIVITY_DEFINITION_ID is null " +
                         "and e1.PROCESS_DEFINITION_ID='"+processDefinition+"' "+
-                        "and e1.TIMESTAMP>="+timespan.getStart()+" "+
-                        "and e2.TIMESTAMP<="+timespan.getEnd()+" "+
+                        "and e1.TIMESTAMP>=?3 "+
+                        "and e2.TIMESTAMP<=?4 "+
                         "order by e1.EID;", Event.class);
 
-                query.setParameter(1, "Open_Running");
-                query.setParameter(2, "Closed_Completed");
-                
+                query.setParameter(1, State.Open_Running.toString());
+                query.setParameter(2, completionState.toString());
+                query.setParameter(3, timespan.getStart());
+                query.setParameter(4, timespan.getEnd());
+
                 return query.getResultList();
             }
         });
@@ -193,7 +179,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
         return result;
     }
 
-    public List<Event> getInstanceEvents(final String... processInstances)
+    public List<Event> getActivityCompletedEvents(final String... processInstances)
     {
         List<Event> result = executeCommand(new SQLCommand<List<Event>>()
         {
@@ -226,8 +212,8 @@ public class DefaultBPAFDataSource implements BPAFDataSource
 
                 Query query = em.createNativeQuery(sb.toString(), Event.class);
 
-                query.setParameter(1, "Open_Running");
-                query.setParameter(2, "Closed_Completed");
+                query.setParameter(1, State.Open_Running.toString());
+                query.setParameter(2, State.Closed_Completed.toString());
                 
                 return query.getResultList();
             }

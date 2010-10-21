@@ -22,6 +22,7 @@
 package org.jboss.bpm.monitor.model;
 
 import org.jboss.bpm.monitor.model.bpaf.Event;
+import org.jboss.bpm.monitor.model.bpaf.State;
 import org.jboss.bpm.monitor.model.metric.Timespan;
 
 import java.util.List;
@@ -51,9 +52,7 @@ public interface BPAFDataSource
    */
 
   List<String> getActivityDefinitions(String processInstance);
-
-  List<Event> getPastActivities(final String processInstance);
-
+  
   /**
    * Get a list of process definition events for a specific timespan.
    * Process definition events are the ones that don't have and activityDefinition
@@ -69,11 +68,11 @@ public interface BPAFDataSource
    * @return List of <tt>State.Open</tt> and <tt>State.Closed</tt> events for a particluar process definition
    * excluding the activity events (<tt>activityDefinitionID is null</tt>)
    */
-  List<Event> getDefinitionEvents(String processDefinition, Timespan timespan);
+  List<Event> getInstanceEvents(String processDefinition, Timespan timespan, State completionState);
 
 
   /**
-   * Get a list of process instance events for specific timespan.
+   * Get a list of process instance events.
    * Process instance event are the one that have an activity assigned to it.
    *
    * <p/>
@@ -84,5 +83,5 @@ public interface BPAFDataSource
    * @param processInstance the process instance ID      
    * @return a list of instance activity events.
    */
-  List<Event> getInstanceEvents(String... processInstance);
+  List<Event> getActivityCompletedEvents(String... processInstance);
 }

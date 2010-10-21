@@ -24,9 +24,13 @@ package org.jboss.bpm.monitor.gui.server;
 import org.jboss.bpm.monitor.gui.client.HistoryRecords;
 import org.jboss.bpm.monitor.model.BPAFDataSource;
 import org.jboss.bpm.monitor.model.DataSourceFactory;
+import org.jboss.bpm.monitor.model.bpaf.Event;
+import org.jboss.bpm.monitor.model.bpaf.State;
+import org.jboss.bpm.monitor.model.metric.Timespan;
+import org.jboss.bpm.monitor.model.metric.TimespanFactory;
 import org.jboss.errai.bus.server.annotations.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class HistoryRecordsService implements HistoryRecords
@@ -55,6 +59,39 @@ public class HistoryRecordsService implements HistoryRecords
     {
         assertDataSource();
         return dataSource.getActivityDefinitions(instance);
+    }
+
+    /**
+     * resolve the timespan bounds for a given timestap
+     * and queries for any occurance within that range.
+     *
+     * @param definitionKey
+     * @param timestamp
+     * @param timespan
+     * @return a list of process instance id's
+     */
+    public Set<String> getCompletedInstances(String definitionKey, long timestamp, String timespan) {
+
+        Set<String> result = new HashSet<String>();
+
+        Timespan chartTimespan = TimespanFactory.fromValue(timespan);
+        long[] bounds = TimespanFactory.getLeftBounds(chartTimespan, new Date(timestamp));
+
+        System.out.println(new Date(bounds[0]) +" - "+ new Date(bounds[1]));
+        
+        List<Event> events = dataSource.getInstanceEvents(
+                definitionKey,
+                new Timespan(bounds[0], bounds[1], chartTimespan.getUnit(), "custom"),
+                State.Closed_Completed                
+        );
+        
+        for(Event e : events)
+        {
+            if(e.getEventDetails().getCurrentState().equals(State.Closed_Completed))
+                result.add(e.getProcessInstanceID());
+        }
+
+        return result;
     }
 
     // catch hosted mode errors

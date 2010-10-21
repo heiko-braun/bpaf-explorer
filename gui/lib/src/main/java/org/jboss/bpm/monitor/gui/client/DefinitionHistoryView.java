@@ -111,9 +111,9 @@ public class DefinitionHistoryView implements WidgetProvider, CommentEditCallbac
 
     final PopupMenu timeBtnMenu = new PopupMenu();
 
-    for(final String ts : TimespanValues.ALL)
+    for(final TimespanValues ts : TimespanValues.values())
     {
-      timeBtnMenu.addItem(ts, new Command()
+      timeBtnMenu.addItem(ts.name(), new Command()
       {
         public void execute()
         {
@@ -233,7 +233,7 @@ public class DefinitionHistoryView implements WidgetProvider, CommentEditCallbac
    * @param procDefID
    * @param timespan
    */
-  private void loadGraphData(final String procDefID, final String timespan)
+  private void loadGraphData(final String procDefID, final TimespanValues timespan)
   {
     ChartData rpcService = MessageBuilder.createCall(
         new RemoteCallback<String>()
@@ -248,7 +248,7 @@ public class DefinitionHistoryView implements WidgetProvider, CommentEditCallbac
         ChartData.class
     );
     
-    rpcService.getDefinitionActivity(procDefID, timespan);
+    rpcService.getCompletedInstances(procDefID, timespan.name());
   }
 
   public void onSaveComment(ChartComment comment)

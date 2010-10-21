@@ -22,6 +22,7 @@
 package org.jboss.bpm.monitor.model.metric;
 
 import org.jboss.bpm.monitor.model.bpaf.Event;
+import org.jboss.bpm.monitor.model.metric.Average;
 
 import java.util.ArrayList;
 import java.util.HashMap;
