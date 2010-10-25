@@ -9,12 +9,15 @@ import com.google.gwt.core.client.JavaScriptObject;
  */
 public class JSOModel extends JavaScriptObject
 {
-  protected JSOModel()
-  {
-  }
+    protected JSOModel()
+    {
+    }
 
-  public static native JSOModel fromJson(String jsonString) /*-{
+    public static native JSOModel fromJson(String jsonString) /*-{
           return eval('(' + jsonString + ')');
       }-*/;
 
+
+    public final native int length() /*-{ return this.length; }-*/;
+    public final native JavaScriptObject get(int i) /*-{ return this[i];     }-*/;
 }

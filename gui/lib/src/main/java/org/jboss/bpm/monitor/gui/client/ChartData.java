@@ -12,7 +12,5 @@ public interface ChartData
 {
     String getCompletedInstances(String processDefiniton, String timespanValue);
 
-    String getFailedInstances(String processDefiniton, String timespanValue);
-
-    String getTerminatedInstances(String processDefiniton, String timespanValue);
+    String getFailedInstances(String processDefiniton, String timespanValue);    
 }
