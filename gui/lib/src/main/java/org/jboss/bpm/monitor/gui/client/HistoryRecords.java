@@ -19,11 +19,10 @@ public interface HistoryRecords
 
     List<String> getActivityKeys(String instanceKey);
 
-    /**
-     * Which instances have been executed in a given timespan?
-     * 
-     * @return a list of process instance id#s for a timespan
-     */
     Set<String> getCompletedInstances(String definitionKey, long timestamp, String timespan);
+
+    Set<String> getTerminatedInstances(String definitionKey, long timestamp, String timespan);
+
+    Set<String> getFailedInstances(String definitionKey, long timestamp, String timespan);
 
 }

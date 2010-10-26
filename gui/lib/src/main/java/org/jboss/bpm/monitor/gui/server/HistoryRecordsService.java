@@ -62,8 +62,7 @@ public class HistoryRecordsService implements HistoryRecords
     }
 
     /**
-     * resolve the timespan bounds for a given timestap
-     * and queries for any occurance within that range.
+     * retrieve instances for a given timespan
      *
      * @param definitionKey
      * @param timestamp
@@ -71,27 +70,56 @@ public class HistoryRecordsService implements HistoryRecords
      * @return a list of process instance id's
      */
     public Set<String> getCompletedInstances(String definitionKey, long timestamp, String timespan) {
+        return getInstances(definitionKey, timestamp, timespan, State.Closed_Completed);
+    }
+
+    private Set<String> getInstances(String definitionKey, long timestamp, String timespan, State completionState) {
 
         Set<String> result = new HashSet<String>();
 
         Timespan chartTimespan = TimespanFactory.fromValue(timespan);
         long[] bounds = TimespanFactory.getLeftBounds(chartTimespan, new Date(timestamp));
-
-        System.out.println(new Date(bounds[0]) +" - "+ new Date(bounds[1]));
         
         List<Event> events = dataSource.getInstanceEvents(
                 definitionKey,
                 new Timespan(bounds[0], bounds[1], chartTimespan.getUnit(), "custom"),
-                State.Closed_Completed                
+                completionState
         );
-        
+
+        // parity matched, only consider actual 'Closed_...' events
         for(Event e : events)
         {
-            if(e.getEventDetails().getCurrentState().equals(State.Closed_Completed))
+            if(e.getEventDetails().getCurrentState().equals(completionState))
                 result.add(e.getProcessInstanceID());
         }
 
         return result;
+    }
+
+    /**
+     * retrieve instances for a given timespan
+     *
+     * @param definitionKey
+     * @param timestamp
+     * @param timespan
+     * @return a list of process instance id's
+     */
+    public Set<String> getFailedInstances(String definitionKey, long timestamp, String timespan) {
+
+        return getInstances(definitionKey, timestamp, timespan, State.Closed_Completed_Failed);
+    }
+
+    /**
+     * retrieve instances for a given timespan
+     *
+     * @param definitionKey
+     * @param timestamp
+     * @param timespan
+     * @return a list of process instance id's
+     */
+    public Set<String> getTerminatedInstances(String definitionKey, long timestamp, String timespan) {
+
+        return getInstances(definitionKey, timestamp, timespan, State.Closed_Cancelled_Terminated);
     }
 
     // catch hosted mode errors
