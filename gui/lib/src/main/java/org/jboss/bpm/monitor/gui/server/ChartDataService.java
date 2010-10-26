@@ -57,12 +57,12 @@ public class ChartDataService implements ChartData
 
         final Timespan timespan = TimespanFactory.fromValue(timespanValue);
 
-        List<Event> terminated = dataSource.getInstanceEvents(processDefiniton, timespan, State.Closed_Cancelled_Terminated);
         List<Event> completed = dataSource.getInstanceEvents(processDefiniton, timespan, State.Closed_Completed);
         List<Event> failed  = dataSource.getInstanceEvents(processDefiniton, timespan, State.Closed_Completed_Failed);
+        List<Event> terminated = dataSource.getInstanceEvents(processDefiniton, timespan, State.Closed_Cancelled_Terminated);
 
         return createDatasetJSO(
-                new String[]{"Terminated", "Completed", "Failed"}, timespan, true, terminated, completed, failed);
+                new String[]{"Completed", "Failed", "Terminated"}, timespan, true, completed, failed, terminated);
     }
   
     private static String createDatasetJSO(String[] title, Timespan timespan, boolean matchParity, List<Event>... events) {

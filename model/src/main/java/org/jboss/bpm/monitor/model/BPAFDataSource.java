@@ -33,55 +33,63 @@ import java.util.List;
  */
 public interface BPAFDataSource
 {
-  /**
-   * Get a list of distinct process definition ID's that are known to the system.
-   * @return a collection of process definition ID's
-   */
-  List<String> getProcessDefinitions();
+    /**
+     * Get a list of distinct process definition ID's that are known to the system.
+     * @return a collection of process definition ID's
+     */
+    List<String> getProcessDefinitions();
 
-  /**
-   * Get a list of distinct process instance ID's that are known to the system.
-   * @return a collection of process instance ID's
-   */
+    /**
+     * Get a list of distinct process instance ID's that are known to the system.
+     * @return a collection of process instance ID's
+     */
 
-  List<String> getProcessInstances(String processDefinition);
+    List<String> getProcessInstances(String processDefinition);
 
-  /**
-   * Get a list of distinct activity definition ID's that are known to the system.
-   * @return a collection of activity definition ID's
-   */
+    /**
+     * Get a list of distinct activity definition ID's that are known to the system.
+     * @return a collection of activity definition ID's
+     */
 
-  List<String> getActivityDefinitions(String processInstance);
-  
-  /**
-   * Get a list of process definition events for a specific timespan.
-   * Process definition events are the ones that don't have and activityDefinition
-   * assigned to them. These events are typically used to indicated start and end of an
-   * process instance lifecycle.
-   * <p/>
-   * NOTE: Parity is important <code>(events.size()%2==0)</code>.
-   * Only return result sets that include matching State.Close events.
-   * Otherwise you include instances that are still running.
-   *
-   * @param processDefinition the process definition ID
-   * @param timespan a timespan (inclusive)   
-   * @return List of <tt>State.Open</tt> and <tt>State.Closed</tt> events for a particluar process definition
-   * excluding the activity events (<tt>activityDefinitionID is null</tt>)
-   */
-  List<Event> getInstanceEvents(String processDefinition, Timespan timespan, State completionState);
+    List<String> getActivityDefinitions(String processInstance);
+
+    /**
+     * Get a list of process definition events for a specific timespan.
+     * Process definition events are the ones that don't have and activityDefinition
+     * assigned to them. These events are typically used to indicated start and end of an
+     * process instance lifecycle.
+     * <p/>
+     * NOTE: Parity is important <code>(events.size()%2==0)</code>.
+     * Only return result sets that include matching State.Close events.
+     * Otherwise you include instances that are still running.
+     *
+     * @param processDefinition the process definition ID
+     * @param timespan a timespan (inclusive)
+     * @return List of <tt>State.Open</tt> and <tt>State.Closed</tt> events for a particluar process definition
+     * excluding the activity events (<tt>activityDefinitionID is null</tt>)
+     */
+    List<Event> getInstanceEvents(String processDefinition, Timespan timespan, State completionState);
 
 
-  /**
-   * Get a list of process instance events.
-   * Process instance event are the one that have an activity assigned to it.
-   *
-   * <p/>
-   * NOTE: Parity is important <code>(events.size()%2==0)</code>.
-   * Only return result sets that include matching State.Close events.
-   * Otherwise you include activities that are still running.
-   *
-   * @param processInstance the process instance ID      
-   * @return a list of instance activity events.
-   */
-  List<Event> getActivityCompletedEvents(String... processInstance);
+    /**
+     * Get a list of process instance events.
+     * Process instance event are the one that have an activity assigned to it.
+     *
+     * <p/>
+     * NOTE: Parity is important <code>(events.size()%2==0)</code>.
+     * Only return result sets that include matching State.Close events.
+     * Otherwise you include activities that are still running.
+     *
+     * @param processInstance the process instance ID
+     * @return a list of instance activity events.
+     */
+    List<Event> getActivityCompletedEvents(String... processInstance);
+
+
+    /**
+     * Retrieves any event for a particular instance
+     * @param processInstance
+     * @return a list of events
+     */
+    List<Event> getPastActivities(final String processInstance);
 }

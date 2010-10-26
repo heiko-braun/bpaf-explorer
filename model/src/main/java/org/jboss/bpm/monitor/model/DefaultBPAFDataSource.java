@@ -40,7 +40,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
 {
 
     EntityManagerFactory emf;
-    
+
     public DefaultBPAFDataSource(EntityManagerFactory emf) {
         this.emf = emf;
     }
@@ -63,7 +63,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
             tx = (UserTransaction)ctx.lookup("UserTransaction");
             tx.begin();
 
-            em = emf.createEntityManager();         
+            em = emf.createEntityManager();
             return cmd.execute(em);
         }
         catch(Exception e)
@@ -80,11 +80,11 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                         tx.commit();
                     else
                         tx.setRollbackOnly();
-                    
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                
+
                 em.close();
             }
         }
@@ -174,7 +174,7 @@ public class DefaultBPAFDataSource implements BPAFDataSource
                 return query.getResultList();
             }
         });
-        
+
         return result;
     }
 
@@ -213,7 +213,26 @@ public class DefaultBPAFDataSource implements BPAFDataSource
 
                 query.setParameter(1, State.Open_Running.toString());
                 query.setParameter(2, State.Closed_Completed.toString());
-                
+
+                return query.getResultList();
+            }
+        });
+
+        return result;
+    }
+
+    public List<Event> getPastActivities(final String processInstance)
+    {
+        List<Event> result = executeCommand(new SQLCommand<List<Event>>()
+        {
+            public List<Event> execute(EntityManager em)
+            {
+                Query query = em.createQuery(
+                        "select e from Event as e" +
+                                " where e.processInstanceID=:id"
+                );
+                query.setParameter("id", processInstance);
+
                 return query.getResultList();
             }
         });
