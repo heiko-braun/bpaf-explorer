@@ -26,19 +26,8 @@ import org.timepedia.chronoscope.client.ChronoscopeOptions;
 import org.timepedia.chronoscope.client.browser.Chronoscope;
 
 public class MonitorUI implements EntryPoint
-{  
-  public static Chronoscope chronoscope;
-  
+{
   public void onModuleLoad() {
-
-    // Chronoscope.enableHistorySupport(true);
-    Chronoscope.setFontBookRendering(true);
-    ChronoscopeOptions.setErrorReporting(true);
-    Chronoscope.setMicroformatsEnabled(false);
-    Chronoscope.setShowCredits(false);
-    Chronoscope.initialize();    
-
-
-    chronoscope = Chronoscope.getInstance();
+ 
   }
 }

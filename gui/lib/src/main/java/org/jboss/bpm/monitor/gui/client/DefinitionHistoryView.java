@@ -286,7 +286,7 @@ public class DefinitionHistoryView implements WidgetProvider, CommentEditCallbac
     try
     {
       final Datasets<Tuple2D> datasets = new Datasets<Tuple2D>();
-      datasets.add(MonitorUI.chronoscope.getDatasetReader().createDatasetFromJson(
+      datasets.add(ChronoscopeFactory.getInstance().getDatasetReader().createDatasetFromJson(
           new GwtJsonDataset(JSOModel.fromJson(jsonData)))
       );
       Dataset[] dsArray = datasets.toArray();
