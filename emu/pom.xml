@@ -4,14 +4,14 @@
     <name>JBoss BPM - ActivityMonitor::Emulation</name>
     <groupId>org.jboss.bpm</groupId>
     <artifactId>activity-monitor-emu</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-Beta1</version>
     <packaging>jar</packaging>
 
     <!-- Parent -->
     <parent>
         <groupId>org.jboss.bpm</groupId>
         <artifactId>activity-monitor-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-Beta1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
