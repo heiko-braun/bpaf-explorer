@@ -4,14 +4,14 @@
     <name>JBoss BPM - ActivityMonitor::UI::Lib</name>
     <groupId>org.jboss.bpm</groupId>
     <artifactId>activity-monitor-ui-lib</artifactId>
-    <version>1.0.0-Beta1</version>
+    <version>1.0.0-Beta2</version>
     <packaging>jar</packaging>
 
     <!-- Parent -->
     <parent>
         <groupId>org.jboss.bpm</groupId>
         <artifactId>activity-monitor-parent</artifactId>
-        <version>1.0.0-Beta1</version>
+        <version>1.0.0-Beta2</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.jboss.bpm</groupId>
             <artifactId>activity-monitor-model</artifactId>
-            <version>1.0.0-Beta1</version>
+            <version>1.0.0-Beta2</version>
         </dependency>
         
         <dependency>
