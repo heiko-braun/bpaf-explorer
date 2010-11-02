@@ -7,10 +7,16 @@
     <version>1.0.0-Beta2</version>
     <packaging>pom</packaging>
 
+    <description>
+        BPAF History loggin library    
+    </description>
+
+    <url>http://github.com/heiko-braun/bpaf-explorer</url>
+    
     <scm>
-        <connection>scm:svn:https://svn.jboss.org/repos/soag/activity-monitor/trunk</connection>
-        <developerConnection>scm:svn:https://svn.jboss.org/repos/soag/activity-monitor/trunk</developerConnection>
-        <url>https://svn.jboss.org/repos/soag/activity-monitor/trunk</url>
+        <connection>scm:git:http://github.com/heiko-braun/bpaf-explorer</connection>
+        <developerConnection>scm:git:http://github.com/heiko-braun/bpaf-explorer</developerConnection>
+        <url>http://github.com/heiko-braun/bpaf-explorer</url>
     </scm>
 
     <organization>
@@ -18,6 +24,19 @@
         <url>http://www.jboss.org</url>
     </organization>
 
+    <developers>
+        <developer>
+            <name>Heiko Braun</name>
+            <id>hbraun</id>
+            <email>hbraun@redhat.com</email>
+            <organization>Red Hat</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+    
     <!-- IssueManagement -->
     <issueManagement>
         <system>jira</system>
